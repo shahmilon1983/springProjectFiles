@@ -1,0 +1,129 @@
+
+How to connect Microservice to Spring Cloud and Spring Cloud to Git Repo
+   
+Note: After creating a project, in application.properties, we need to configure like below. Otherwise, we will get error.
+Here, port number of 8888 is the config server port number we will use later.
+
+spring.config.import=optional:configserver:http://localhost:8888
+
+Step-1: First Create Microservice project as a service and named " com.limitsmicroservice".
+It has different methods. For example:
+
+Step-I: Create a one Controller Class like below:
+
+@RestController
+public class LimitsController {
+	@Autowired
+	private Configuration configuration;
+	
+	@GetMapping("/limits")
+	public Limits retrievedAll() {
+		
+		return new Limits(configuration.getMinimum(),configuration.getMaximum());
+	}
+}
+
+Step-II: Create a one bean class like below:
+
+public class Limits {
+	private int minimum;
+	private int maximum;
+	public Limits() {
+		super();
+	}
+	public Limits(int minimum, int maximum) {
+		super();
+		this.minimum = minimum;
+		this.maximum = maximum;
+	}
+	public int getMinimum() {
+		return minimum;
+	}
+	public void setMinimum(int minimum) {
+		this.minimum = minimum;
+	}
+	public int getMaximum() {
+		return maximum;
+	}
+	public void setMaximum(int maximum) {
+		this.maximum = maximum;
+	}
+
+}
+
+Step-III: Create a one Configuration Class like
+
+@Component
+@ConfigurationProperties("limits-service")
+public class Configuration {
+	private int minimum;
+	private int maximum;
+	public int getMinimum() {
+		return minimum;
+	}
+	public void setMinimum(int minimum) {
+		this.minimum = minimum;
+	}
+	public int getMaximum() {
+		return maximum;
+	}
+	public void setMaximum(int maximum) {
+		this.maximum = maximum;
+	}	
+}
+
+Step-IV: In application.properties, we need to configure like below:
+
+spring.config.import=optional:configserver:http://localhost:8888
+
+limits-service.minimum=3
+limits-service.maximum=997
+
+Step-2: We create another project for "Spring Cloud Config Server" and named it "com.server-microservices".
+
+Here, we add "@EnableConfigServer"
+
+step-I:
+
+@EnableConfigServer
+@SpringBootApplication
+public class Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+}
+
+Step-II: In application.properties, we need to configur following way.
+//com.server-microservices is the name of the project
+spring.application.name=com.server-microservices
+server.port=8888
+//file path and that file is created  in the git repository.
+spring.cloud.config.server.git.uri=file:///E:/Spring-boot-project/microservices/git-localconfig-repo
+
+Step-3: We create another folder in the same project directory. and Open that folder with "visual studio code"
+and create a simple file and type following code based on bean class.
+
+limits-service.minimum=4
+limits-service.maximum=996
+
+Git Command to initial git and add file to git repository.
+
+1. pwd --> show your currect location.
+2. cd E:\Spring-boot-project\microservices --> for example, to move into directive
+3. mkdir git-localconfig-repo
+4. cd git-localconfig-repo
+5. git init
+6. git add *
+7. Open "git-localconfig-repo" folder with Visual Studio Code and create a file 
+and type following code:
+
+limits-service.minimum=4
+limits-service.maximum=996
+
+Step-4: Now go to the url and type:
+here, limits-service is the name of file and default
+is used for configuration.
+
+http://localhost:8888/limits-service/default
+
