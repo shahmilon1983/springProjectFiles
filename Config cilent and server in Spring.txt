@@ -1,5 +1,7 @@
 
 How to connect Microservice to Spring Cloud and Spring Cloud to Git Repo
+
+Tools or dependencies: Web, Config Client, Actuator and Devtools
    
 Note: After creating a project, in application.properties, we need to configure like below. Otherwise, we will get error.
 Here, port number of 8888 is the config server port number we will use later.
@@ -80,6 +82,7 @@ limits-service.minimum=3
 limits-service.maximum=997
 
 Step-2: We create another project for "Spring Cloud Config Server" and named it "com.server-microservices".
+Tools or dependencies: Config server and devtools
 
 Here, we add "@EnableConfigServer"
 
