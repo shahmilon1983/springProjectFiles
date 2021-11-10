@@ -119,7 +119,7 @@ Git Command to initial git and add file to git repository.
 5. git init
 6. git add *
 7. Open "git-localconfig-repo" folder with Visual Studio Code and create a file 
-and type following code:
+named limits-service.properties and type following code:
 
 limits-service.minimum=4
 limits-service.maximum=996
