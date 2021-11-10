@@ -128,5 +128,9 @@ Step-4: Now go to the url and type:
 here, limits-service is the name of file and default
 is used for configuration.
 
+step4: In application.properties of limits-microservices project add following code
+/*here, limits-service is the file name created in git repository */
+spring.application.name=limits-service
+
 http://localhost:8888/limits-service/default
 
